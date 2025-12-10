@@ -1,0 +1,30 @@
+{
+    "name": "papimod/database",
+    "description": "Module Papi",
+    "type": "library",
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "Papimod\\Database\\": "Source/",
+            "Papimod\\Database\\Test\\": "Test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "4uruanna",
+            "email": "adrien@villalonga.software"
+        }
+    ],
+    "scripts": {
+        "lint": "./vendor/bin/phpcbf || true && ./vendor/bin/phpcs",
+        "test": "./vendor/bin/phpunit"
+    },
+    "require": {
+        "papimod/dotenv": "^1.1",
+        "papi/papi": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5",
+        "squizlabs/php_codesniffer": "^4.0"
+    }
+}
