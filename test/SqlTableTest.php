@@ -3,8 +3,10 @@
 namespace Papimod\Database\Test;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\SqlInsert;
 use Papimod\Database\sql\SqlSelect;
 use Papimod\Database\sql\SqlTable;
+use Papimod\Database\sql\SqlUpdate;
 use Papimod\Database\Test\DatabaseTestCase;
 use PDOException;
 use PDOStatement;
@@ -73,5 +75,17 @@ final class SqlTableTest extends DatabaseTestCase
     {
         $instance = $this->table->select();
         $this->assertInstanceOf(SqlSelect::class, $instance);
+    }
+
+    public function testInsert(): void
+    {
+        $instance = $this->table->insert();
+        $this->assertInstanceOf(SqlInsert::class, $instance);
+    }
+
+    public function testUpdate(): void
+    {
+        $instance = $this->table->update();
+        $this->assertInstanceOf(SqlUpdate::class, $instance);
     }
 }

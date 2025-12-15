@@ -38,4 +38,9 @@ final class SqlTable
     {
         return Database::pdo()->prepare("TRUNCATE TABLE {$this->name}");
     }
+
+    public function update(): SqlUpdate
+    {
+        return new SqlUpdate($this);
+    }
 }

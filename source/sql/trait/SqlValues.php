@@ -41,6 +41,23 @@ trait SqlValues
         return implode(", ", $query);
     }
 
+    public function getUpdateValuesQuery(): string
+    {
+        $query = [];
+
+        foreach ($this->value_list as $value) {
+            $query[] =  implode(
+                ", ",
+                array_map(
+                    fn(ColumnValue $column_value) => "{$column_value->column_name} = {$column_value}",
+                    $value
+                )
+            );
+        }
+
+        return implode(", ", $query);
+    }
+
     public function bindValues(PDOStatement $statement): void
     {
         foreach ($this->value_list as $value) {

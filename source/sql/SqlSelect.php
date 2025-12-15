@@ -30,8 +30,8 @@ final class SqlSelect
         $columns = $this->columns ? implode(', ', $this->columns) : '*';
 
         $query = "SELECT $columns FROM {$this->table->name}"
-            . $this->getWhereQuery()
             . $this->getJoinQuery()
+            . $this->getWhereQuery()
             . $this->getLimitQuery()
             . $this->getOrderByQuery();
 
