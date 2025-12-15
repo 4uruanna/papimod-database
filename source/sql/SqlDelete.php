@@ -3,11 +3,12 @@
 namespace Papimod\Database\sql;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\interface\IQuery;
 use Papimod\Database\sql\trait\SqlJoin;
 use Papimod\Database\sql\trait\SqlWhere;
 use PDOStatement;
 
-final class SqlDelete
+final class SqlDelete implements IQuery
 {
     use SqlJoin;
     use SqlWhere;

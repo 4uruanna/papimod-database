@@ -3,11 +3,12 @@
 namespace Papimod\Database\sql;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\interface\IQuery;
 use Papimod\Database\sql\model\Column;
 use Papimod\Database\sql\trait\SqlValues;
 use PDOStatement;
 
-final class SqlInsert
+final class SqlInsert implements IQuery
 {
     use SqlValues;
 

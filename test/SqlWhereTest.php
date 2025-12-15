@@ -55,7 +55,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("NAME")
             ->isEqual("AAA")
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -67,7 +67,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("NAME")
             ->isNotEqual("AAA")
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -79,7 +79,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("MAYBE")
             ->isNull()
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -91,7 +91,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("MAYBE")
             ->isNotNull()
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -103,7 +103,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isGreater(2)
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -115,7 +115,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isLess(2)
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -127,7 +127,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isGreaterOrEqual(2)
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -139,7 +139,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isLessOrEqual(2)
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -151,7 +151,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isIn([1, 3])
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -163,7 +163,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("AGE")
             ->isNotIn([1, 3])
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -175,7 +175,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("NAME")
             ->isLike("A%")
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -187,7 +187,7 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("NAME")
             ->isNotLike("%A%")
-            ->fetch();
+            ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();

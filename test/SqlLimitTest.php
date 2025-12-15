@@ -52,7 +52,7 @@ final class SqlLimitTest extends DatabaseTestCase
 
     public function testLimit(): void
     {
-        $statement = $this->select->limit(2)->fetch();
+        $statement = $this->select->limit(2)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(2, $statement->rowCount());
@@ -60,12 +60,12 @@ final class SqlLimitTest extends DatabaseTestCase
 
     public function testIgnoreNegativeAndZeroLimit(): void
     {
-        $statement = $this->select->limit(-1)->fetch();
+        $statement = $this->select->limit(-1)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(5, $statement->rowCount());
 
-        $statement = $this->select->limit(0)->fetch();
+        $statement = $this->select->limit(0)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(5, $statement->rowCount());
@@ -73,7 +73,7 @@ final class SqlLimitTest extends DatabaseTestCase
 
     public function testOffset(): void
     {
-        $statement = $this->select->limit(10, 1)->fetch();
+        $statement = $this->select->limit(10, 1)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(4, $statement->rowCount());
@@ -81,12 +81,12 @@ final class SqlLimitTest extends DatabaseTestCase
 
     public function testIgnoreNegativeAndZeroOffset(): void
     {
-        $statement = $this->select->limit(10, -1)->fetch();
+        $statement = $this->select->limit(10, -1)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(5, $statement->rowCount());
 
-        $statement = $this->select->limit(10, 0)->fetch();
+        $statement = $this->select->limit(10, 0)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(5, $statement->rowCount());

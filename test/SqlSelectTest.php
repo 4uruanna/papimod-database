@@ -51,7 +51,7 @@ final class SqlSelectTest extends DatabaseTestCase
 
     public function testSelect(): void
     {
-        $statement = $this->select->fetch();
+        $statement = $this->select->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(5, $statement->rowCount());
@@ -60,7 +60,7 @@ final class SqlSelectTest extends DatabaseTestCase
     public function testSelectSingleColumn(): void
     {
         $this->select = new SqlSelect(new SqlTable(self::TABLE), ["NAME"]);
-        $statement = $this->select->fetch();
+        $statement = $this->select->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(1, $statement->columnCount());

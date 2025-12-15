@@ -54,7 +54,7 @@ final class SqlOrderByTest extends DatabaseTestCase
 
     public function testOrderBy(): void
     {
-        $statement = $this->select->orderBy("AGE", Order::DESC)->fetch();
+        $statement = $this->select->orderBy("AGE", Order::DESC)->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $result_list = $statement->fetchAll();
@@ -67,7 +67,7 @@ final class SqlOrderByTest extends DatabaseTestCase
         $statement = $this->select
             ->orderBy("AGE", Order::ASC)
             ->orderBy("NAME", Order::DESC)
-            ->fetch();
+            ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();

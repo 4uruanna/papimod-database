@@ -82,7 +82,7 @@ final class SqlJoinTest extends DatabaseTestCase
         $statement = $this->select
             ->innerJoin("sql_join_test_b b")
             ->on("a.AGE", "b.A_AGE")
-            ->fetch();
+            ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
@@ -97,7 +97,7 @@ final class SqlJoinTest extends DatabaseTestCase
         $statement = $this->select
             ->leftJoin("sql_join_test_b b")
             ->on("a.ID", "b.A_AGE")
-            ->fetch();
+            ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
@@ -110,7 +110,7 @@ final class SqlJoinTest extends DatabaseTestCase
         $statement = $this->select
             ->rightJoin("sql_join_test_b b")
             ->on("a.ID", "b.A_AGE")
-            ->fetch();
+            ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
@@ -125,7 +125,7 @@ final class SqlJoinTest extends DatabaseTestCase
             ->on("a.AGE", "b.A_AGE")
             ->innerJoin("sql_join_test_c c")
             ->on("b.ID", "c.B_ID")
-            ->fetch();
+            ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();

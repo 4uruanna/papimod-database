@@ -3,13 +3,14 @@
 namespace Papimod\Database\sql;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\interface\IQuery;
 use Papimod\Database\sql\trait\SqlJoin;
 use Papimod\Database\sql\trait\SqlLimit;
 use Papimod\Database\sql\trait\SqlOrderBy;
 use Papimod\Database\sql\trait\SqlWhere;
 use PDOStatement;
 
-final class SqlSelect
+final class SqlSelect implements IQuery
 {
     use SqlLimit;
     use SqlOrderBy;
@@ -25,7 +26,7 @@ final class SqlSelect
         $this->columns = $columns;
     }
 
-    public function fetch(): PDOStatement
+    public function build(): PDOStatement
     {
         $columns = $this->columns ? implode(', ', $this->columns) : '*';
 
