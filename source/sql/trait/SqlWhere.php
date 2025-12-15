@@ -2,18 +2,44 @@
 
 namespace Papimod\Database\sql\trait;
 
+use Papimod\Database\sql\enumerator\Operator;
+use Papimod\Database\sql\enumerator\Type;
 use Papimod\Database\sql\model\WhereParameter;
 use PDO;
 use PDOStatement;
 
 trait SqlWhere
 {
-    /**
-     * @var WhereParameter[][]
-     */
     private array $where_list = [];
-
     private WhereParameter $last_where_parameter;
+
+    private function getWhereQuery(): string
+    {
+        $query = "";
+
+        if (count($this->where_list) > 0) {
+            $query = "WHERE "
+                . implode(" OR ", array_map(
+                    fn($parameter_list) => implode(" AND ", $parameter_list),
+                    $this->where_list
+                ));
+        }
+
+        return $query;
+    }
+
+    private function bindWhereParameters(PDOStatement $statement): void
+    {
+        $group_count = count($this->where_list);
+        for ($group_index = 0; $group_index < $group_count; $group_index++) {
+            $parameter_count = count($this->where_list[$group_index]);
+            for ($parameter_index = 0; $parameter_index < $parameter_count; $parameter_index++) {
+                $this->where_list[$group_index][$parameter_index]->bind($statement);
+            }
+        }
+    }
+
+    # Initializers (where, and, or)
 
     public function where(string $column): self
     {
@@ -34,92 +60,61 @@ trait SqlWhere
 
     public function or(string $column): self
     {
-        $this->where[] = [];
+        $this->where_list[] = [];
         return $this->and($column);
     }
 
-    private function getWhereQuery(): string
-    {
-        $query = "";
+    # Operators
 
-        if (count($this->where_list) > 0) {
-            $query = " WHERE "
-                . implode(" OR ", array_map(
-                    fn($parameter_list) => implode(
-                        " AND ",
-                        array_map(fn($parameter) => $parameter->__toString(), $parameter_list)
-                    ),
-                    $this->where_list
-                ));
-        }
-
-        return $query;
-    }
-
-    private function bindWhereParameters(PDOStatement $statement): void
-    {
-        $group_count = count($this->where_list);
-
-        for ($group_index = 0; $group_index < $group_count; $group_index++) {
-            $parameter_count = count($this->where_list[$group_index]);
-
-            for ($parameter_index = 0; $parameter_index < $parameter_count; $parameter_index++) {
-                $this->where_list[$group_index][$parameter_index]->bind($statement);
-            }
-        }
-    }
-
-    // Where Parameter
-
-    public function isEqual(mixed $value, int $type = PDO::PARAM_STR)
+    public function isEqual(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::EQUAL)
+            ->setOperator(Operator::EQUAL)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isNotEqual(mixed $value, int $type = PDO::PARAM_STR)
+    public function isNotEqual(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::NOT_EQUAL)
+            ->setOperator(Operator::NOT_EQUAL)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isGreater(mixed $value, int $type = PDO::PARAM_INT)
+    public function isGreater(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::GREATER)
+            ->setOperator(Operator::GREATER)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isLess(mixed $value, int $type = PDO::PARAM_INT)
+    public function isLess(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::LESS)
+            ->setOperator(Operator::LESS)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isGreaterOrEqual(mixed $value, int $type = PDO::PARAM_INT)
+    public function isGreaterOrEqual(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::GREATER_EQUAL)
+            ->setOperator(Operator::GREATER_EQUAL)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isLessOrEqual(mixed $value, int $type = PDO::PARAM_INT)
+    public function isLessOrEqual(mixed $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::LESS_EQUAL)
+            ->setOperator(Operator::LESS_EQUAL)
             ->setValue($value)
             ->setType($type);
         return $this;
@@ -128,7 +123,7 @@ trait SqlWhere
     public function isLike(string $value)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::LIKE)
+            ->setOperator(Operator::LIKE)
             ->setValue($value);
         return $this;
     }
@@ -136,24 +131,24 @@ trait SqlWhere
     public function isNotLike(string $value)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::NOT_LIKE)
+            ->setOperator(Operator::NOT_LIKE)
             ->setValue($value);
         return $this;
     }
 
-    public function isIn(array $value, int $type = PDO::PARAM_STR)
+    public function isIn(array $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::IN)
+            ->setOperator(Operator::IN)
             ->setValue($value)
             ->setType($type);
         return $this;
     }
 
-    public function isNotIn(array $value, int $type = PDO::PARAM_STR)
+    public function isNotIn(array $value, int $type = Type::STRING)
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::NOT_IN)
+            ->setOperator(Operator::NOT_IN)
             ->setValue($value)
             ->setType($type);
         return $this;
@@ -162,7 +157,7 @@ trait SqlWhere
     public function isNull()
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::IS_NULL)
+            ->setOperator(Operator::IS_NULL)
             ->setType(PDO::PARAM_NULL);
         return $this;
     }
@@ -170,7 +165,7 @@ trait SqlWhere
     public function isNotNull()
     {
         $this->last_where_parameter
-            ->setOperator(WhereParameter::IS_NOT_NULL)
+            ->setOperator(Operator::IS_NOT_NULL)
             ->setType(PDO::PARAM_NULL);
         return $this;
     }

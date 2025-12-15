@@ -2,30 +2,18 @@
 
 namespace Papimod\Database\sql\model;
 
-use PDO;
+use Papimod\Database\sql\enumerator\Operator;
+use Papimod\Database\sql\enumerator\Type;
 use PDOStatement;
 
 final class WhereParameter
 {
-    public const EQUAL = '=';
-    public const GREATER = '>';
-    public const LESS = '<';
-    public const GREATER_EQUAL = '>=';
-    public const LESS_EQUAL = '<=';
-    public const NOT_EQUAL = '!=';
-    public const LIKE = 'LIKE';
-    public const NOT_LIKE = 'NOT LIKE';
-    public const IN = 'IN';
-    public const NOT_IN = 'NOT IN';
-    public const IS_NULL = 'IS NULL';
-    public const IS_NOT_NULL = 'IS NOT NULL';
+    private const PREFIX = ":where_parameter_";
 
-    private static int $QUERY_INDEX = 0;
-
-    private static function getQueryIndex(): int
+    private static int $UID = 0;
+    private static function getUID(): int
     {
-        self::$QUERY_INDEX++;
-        return self::$QUERY_INDEX;
+        return self::$UID++;
     }
 
     private readonly string $column;
@@ -33,12 +21,12 @@ final class WhereParameter
 
     private string $operator;
     private mixed $value;
-    private int $type = PDO::PARAM_STR;
+    private int $type = Type::STRING;
 
     public function __construct(string $column)
     {
         $this->column = $column;
-        $this->query_index = self::getQueryIndex();
+        $this->query_index = self::getUID();
     }
 
     public function setValue(mixed $value): self
@@ -61,15 +49,15 @@ final class WhereParameter
 
     public function __toString(): string
     {
-        $query = "{$this->column} {$this->operator}";
+        $query = "{$this->column} {$this->operator} ";
 
-        if ($this->operator !== WhereParameter::IS_NULL && $this->operator !== WhereParameter::IS_NOT_NULL) {
-            if ($this->operator === WhereParameter::IN || $this->operator === WhereParameter::NOT_IN) {
+        if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
+            if ($this->operator === Operator::IN || $this->operator === Operator::NOT_IN) {
                 $c = count($this->value);
                 $query .= " (";
 
                 for ($i = 0; $i < $c; $i++) {
-                    $query .= ":where_parameter_{$this->query_index}_{$i}";
+                    $query .= self::PREFIX . $this->query_index . "_$i";
 
                     if ($i < $c - 1) {
                         $query .= ", ";
@@ -78,7 +66,7 @@ final class WhereParameter
 
                 $query .= ")";
             } else {
-                $query .= " :where_parameter_{$this->query_index}";
+                $query .= self::PREFIX . $this->query_index;
             }
         }
 
@@ -87,15 +75,23 @@ final class WhereParameter
 
     public function bind(PDOStatement $statement): void
     {
-        if ($this->operator !== WhereParameter::IS_NULL && $this->operator !== WhereParameter::IS_NOT_NULL) {
-            if ($this->operator === WhereParameter::IN || $this->operator === WhereParameter::NOT_IN) {
+        if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
+            if ($this->operator === Operator::IN || $this->operator === Operator::NOT_IN) {
                 $ic = count($this->value);
 
                 for ($i = 0; $i < $ic; $i++) {
-                    $statement->bindValue(":where_parameter_{$this->query_index}_{$i}", $this->value[$i], $this->type);
+                    $statement->bindValue(
+                        self::PREFIX . $this->query_index . "_$i",
+                        $this->value[$i],
+                        $this->type
+                    );
                 }
             } else {
-                $statement->bindValue(":where_parameter_{$this->query_index}", $this->value, $this->type);
+                $statement->bindValue(
+                    self::PREFIX . $this->query_index,
+                    $this->value,
+                    $this->type
+                );
             }
         }
     }

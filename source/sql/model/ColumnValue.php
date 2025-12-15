@@ -24,7 +24,7 @@ final class ColumnValue
     {
         $this->column_name = $column_name;
         $this->value = $value;
-        $this->pdo_type = $value === NULL ? PDO::PARAM_NULL : $type;
+        $this->pdo_type = $value === null ? PDO::PARAM_NULL : $type;
         $this->query_index = self::getQueryIndex();
     }
 

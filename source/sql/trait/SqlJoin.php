@@ -6,37 +6,32 @@ use Papimod\Database\sql\model\Join;
 
 trait SqlJoin
 {
-    /**
-     * @var Join[]
-     */
-    private array $join_list = [];
+    private ?Join $last_join = null;
+
+    private string $join_query = "";
 
     public function innerJoin(string $table): self
     {
-        $this->join_list[] = new Join(Join::INNER, $table);
+        $this->last_join = new Join(Join::INNER, $table);
         return $this;
     }
 
     public function leftJoin(string $table): self
     {
-        $this->join_list[] = new Join(Join::LEFT, $table);
+        $this->last_join = new Join(Join::LEFT, $table);
         return $this;
     }
 
     public function rightJoin(string $table): self
     {
-        $this->join_list[] = new Join(Join::RIGHT, $table);
+        $this->last_join = new Join(Join::RIGHT, $table);
         return $this;
     }
 
     public function on(string $column_a, string $column_b): self
     {
-        end($this->join_list)->setOn("$column_a = $column_b");
+        $this->last_join->setOn("$column_a = $column_b");
+        $this->join_query .= " " . $this->last_join;
         return $this;
-    }
-
-    private function getJoinQuery(): string
-    {
-        return " " . implode(" ", $this->join_list) . " ";
     }
 }

@@ -4,34 +4,17 @@ namespace Papimod\Database\sql\trait;
 
 trait SqlLimit
 {
-    private int $limit = 0;
-    private int $offset = 0;
+    private string $limit_query = "";
 
     public function limit(int $limit, int $offset = 0): self
     {
-        if ($limit > 0) {
-            $this->limit = $limit;
-        }
+        $limit = $limit > 0 ? $limit : PHP_INT_MAX;
+        $offset = $offset > 0 ? $offset : 0;
 
-        if ($offset > 0) {
-            $this->offset = $offset;
+        if ($limit > 0 || $offset > 0) {
+            $this->limit_query = " LIMIT $limit OFFSET $offset ";
         }
 
         return $this;
-    }
-
-    private function getLimitQuery(): string
-    {
-        $query = "";
-
-        if ($this->limit) {
-            $query .= " LIMIT {$this->limit} ";
-
-            if ($this->offset) {
-                $query .= " OFFSET {$this->offset} ";
-            }
-        }
-
-        return $query;
     }
 }

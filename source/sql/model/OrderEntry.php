@@ -2,11 +2,8 @@
 
 namespace Papimod\Database\sql\model;
 
-final class Order
+final class OrderEntry
 {
-    public const ASC = 'ASC';
-    public const DESC = 'DESC';
-
     private readonly string $column;
     private readonly string $order;
 

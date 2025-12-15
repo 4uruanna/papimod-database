@@ -22,11 +22,17 @@ final class SqlDelete implements IQuery
 
     public function build(): PDOStatement
     {
-        $query = "DELETE {$this->table->name} FROM {$this->table->name}"
-            . $this->getJoinQuery()
-            . $this->getWhereQuery();
+        $where = $this->getWhereQuery();
 
-        $statement = Database::pdo()->prepare($query);
+        $statement = Database::pdo()->prepare(
+            <<<SQL
+                DELETE {$this->table->name}
+                FROM {$this->table->name}
+                {$this->join_query}
+                $where
+            SQL
+        );
+
         $this->bindWhereParameters($statement);
         return $statement;
     }

@@ -3,10 +3,10 @@
 namespace Papimod\Database\Test;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\enumerator\Type;
 use Papimod\Database\sql\model\Column;
 use Papimod\Database\sql\SqlTable;
 use Papimod\Database\sql\SqlUpdate;
-use PDO;
 use PDOStatement;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
@@ -51,12 +51,14 @@ final class SqlUpdateTest extends DatabaseTestCase
     public function testUpdateValues(): void
     {
         $statement = $this->update
-            ->value((object) array(
-                "NAME" => "Foo",
-                "AGE" => 1
-            ))
+            ->set(
+                (object) array(
+                    "NAME" => "Foo",
+                    "AGE" => 1
+                )
+            )
             ->where("ID")
-            ->isEqual(1, PDO::PARAM_INT)
+            ->isEqual(1, Type::INTEGER)
             ->build();
 
         $this->assertInstanceOf(PDOStatement::class, $statement);

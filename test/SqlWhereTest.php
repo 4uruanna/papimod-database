@@ -55,11 +55,13 @@ final class SqlWhereTest extends DatabaseTestCase
         $statement = $this->select
             ->where("NAME")
             ->isEqual("AAA")
+            ->or("AGE")
+            ->isEqual(3)
             ->build();
 
         $statement->execute();
         $result_list = $statement->fetchAll();
-        $this->assertEquals(1, count($result_list));
+        $this->assertEquals(3, count($result_list));
     }
 
     public function testIsNotEqual(): void

@@ -9,7 +9,6 @@ use Papimod\Database\sql\SqlSelect;
 use Papimod\Database\sql\SqlTable;
 use Papimod\Database\sql\SqlTruncate;
 use Papimod\Database\sql\SqlUpdate;
-use Papimod\Database\Test\DatabaseTestCase;
 use PDOException;
 use PDOStatement;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,81 +16,46 @@ use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversClass(SqlTable::class)]
 #[Medium]
-final class SqlTableTest extends DatabaseTestCase
+final class SqlTableTest extends DatabaseTableTestCase
 {
-    private const TABLE = 'sql_table_test';
-    private const SETUP_QUERY = <<<SQL
-        CREATE TABLE IF NOT EXISTS sql_table_test (
-            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            NAME VARCHAR(255),
-            AGE INT(3) NOT NULL
-        );
-    SQL;
-
-    private const DROP_QUERY = <<<SQL
-        DROP TABLE IF EXISTS sql_table_test;
-    SQL;
-
-    private const INSERT_QUERY = <<<SQL
-        INSERT INTO sql_table_test
-            (NAME, AGE) 
-        VALUES
-            ('A', 1),
-            ('B', 2),
-            ('C', 3),
-            ('D', 4),
-            ('E', 5);
-    SQL;
-
-    private SqlTable $table;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        Database::pdo()->exec(self::DROP_QUERY);
-        Database::pdo()->exec(self::SETUP_QUERY);
-        Database::pdo()->exec(self::INSERT_QUERY);
-        $this->table = new SqlTable(self::TABLE);
-    }
-
     public function testDrop(): void
     {
-        $this->assertEquals(5, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
-        $drop = $this->table->drop();
+        $this->assertEquals(9, Database::pdo()->query("SELECT * FROM test_c")->rowCount());
+        $drop = $this->table_c->drop();
         $this->assertInstanceOf(SqlDrop::class, $drop);
         $statement = $drop->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->expectException(PDOException::class);
-        Database::pdo()->query("SELECT * FROM " . self::TABLE);
+        Database::pdo()->query("SELECT * FROM test_c");
     }
 
     public function testTruncate(): void
     {
-        $this->assertEquals(5, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
-        $truncate = $this->table->truncate();
+        $this->assertEquals(9, Database::pdo()->query("SELECT * FROM test_c")->rowCount());
+        $truncate = $this->table_c->truncate();
         $this->assertInstanceOf(SqlTruncate::class, $truncate);
         $statement = $truncate->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
-        $this->assertEquals(0, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
+        $this->assertEquals(0, Database::pdo()->query("SELECT * FROM test_c")->rowCount());
     }
 
     public function testSelect(): void
     {
-        $instance = $this->table->select();
+        $instance = $this->table_c->select();
         $this->assertInstanceOf(SqlSelect::class, $instance);
     }
 
     public function testInsert(): void
     {
-        $instance = $this->table->insert();
+        $instance = $this->table_c->insert();
         $this->assertInstanceOf(SqlInsert::class, $instance);
     }
 
     public function testUpdate(): void
     {
-        $instance = $this->table->update();
+        $instance = $this->table_c->update();
         $this->assertInstanceOf(SqlUpdate::class, $instance);
     }
 }

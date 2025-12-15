@@ -28,15 +28,22 @@ final class SqlSelect implements IQuery
 
     public function build(): PDOStatement
     {
-        $columns = $this->columns ? implode(', ', $this->columns) : '*';
+        $where = $this->getWhereQuery();
+        $order = $this->getOrderByQuery();
+        $columns = $this->columns
+            ? implode(', ', $this->columns)
+            : '*';
 
-        $query = "SELECT $columns FROM {$this->table->name}"
-            . $this->getJoinQuery()
-            . $this->getWhereQuery()
-            . $this->getLimitQuery()
-            . $this->getOrderByQuery();
+        $statement = Database::pdo()->prepare(
+            <<<SQL
+                SELECT $columns FROM {$this->table->name}
+                {$this->join_query}
+                {$this->limit_query}
+                $where
+                $order
+            SQL
+        );
 
-        $statement = Database::pdo()->prepare($query);
         $this->bindWhereParameters($statement);
         return $statement;
     }
