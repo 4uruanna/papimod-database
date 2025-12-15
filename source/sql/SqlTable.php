@@ -14,14 +14,19 @@ final class SqlTable
         $this->name = $name;
     }
 
-    public function select(?array $columns = null): SqlSelect
+    public function delete(): SqlDelete
     {
-        return new SqlSelect($this, $columns);
+        return new SqlDelete($this);
     }
 
     public function drop(): PDOStatement
     {
         return Database::pdo()->prepare("DROP TABLE {$this->name}");
+    }
+
+    public function select(?array $columns = null): SqlSelect
+    {
+        return new SqlSelect($this, $columns);
     }
 
     public function truncate(): PDOStatement
