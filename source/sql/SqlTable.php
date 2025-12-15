@@ -24,6 +24,11 @@ final class SqlTable
         return Database::pdo()->prepare("DROP TABLE {$this->name}");
     }
 
+    public function insert(): SqlInsert
+    {
+        return new SqlInsert($this);
+    }
+
     public function select(?array $columns = null): SqlSelect
     {
         return new SqlSelect($this, $columns);
