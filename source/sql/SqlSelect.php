@@ -6,6 +6,7 @@ use Papimod\Database\Database;
 use Papimod\Database\sql\trait\SqlJoin;
 use Papimod\Database\sql\trait\SqlLimit;
 use Papimod\Database\sql\trait\SqlOrderBy;
+use Papimod\Database\sql\trait\SqlWhere;
 use PDOStatement;
 
 final class SqlSelect
@@ -13,6 +14,7 @@ final class SqlSelect
     use SqlLimit;
     use SqlOrderBy;
     use SqlJoin;
+    use SqlWhere;
 
     private readonly SqlTable $table;
     private readonly ?array $columns;
@@ -28,11 +30,13 @@ final class SqlSelect
         $columns = $this->columns ? implode(', ', $this->columns) : '*';
 
         $query = "SELECT $columns FROM {$this->table->name}"
+            . $this->getWhereQuery()
             . $this->getJoinQuery()
             . $this->getLimitQuery()
             . $this->getOrderByQuery();
 
         $statement = Database::pdo()->prepare($query);
+        $this->bindWhereParameters($statement);
         return $statement;
     }
 }
