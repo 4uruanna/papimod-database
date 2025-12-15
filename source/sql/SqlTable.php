@@ -2,9 +2,6 @@
 
 namespace Papimod\Database\sql;
 
-use Papimod\Database\Database;
-use PDOStatement;
-
 final class SqlTable
 {
     public readonly string $name;
@@ -19,9 +16,9 @@ final class SqlTable
         return new SqlDelete($this);
     }
 
-    public function drop(): PDOStatement
+    public function drop(): SqlDrop
     {
-        return Database::pdo()->prepare("DROP TABLE {$this->name}");
+        return new SqlDrop($this);
     }
 
     public function insert(): SqlInsert
@@ -34,9 +31,9 @@ final class SqlTable
         return new SqlSelect($this, $columns);
     }
 
-    public function truncate(): PDOStatement
+    public function truncate(): SqlTruncate
     {
-        return Database::pdo()->prepare("TRUNCATE TABLE {$this->name}");
+        return new SqlTruncate($this);
     }
 
     public function update(): SqlUpdate

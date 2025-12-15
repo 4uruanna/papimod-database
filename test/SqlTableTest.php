@@ -3,9 +3,11 @@
 namespace Papimod\Database\Test;
 
 use Papimod\Database\Database;
+use Papimod\Database\sql\SqlDrop;
 use Papimod\Database\sql\SqlInsert;
 use Papimod\Database\sql\SqlSelect;
 use Papimod\Database\sql\SqlTable;
+use Papimod\Database\sql\SqlTruncate;
 use Papimod\Database\sql\SqlUpdate;
 use Papimod\Database\Test\DatabaseTestCase;
 use PDOException;
@@ -55,7 +57,9 @@ final class SqlTableTest extends DatabaseTestCase
     public function testDrop(): void
     {
         $this->assertEquals(5, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
-        $statement = $this->table->drop();
+        $drop = $this->table->drop();
+        $this->assertInstanceOf(SqlDrop::class, $drop);
+        $statement = $drop->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->expectException(PDOException::class);
@@ -65,7 +69,9 @@ final class SqlTableTest extends DatabaseTestCase
     public function testTruncate(): void
     {
         $this->assertEquals(5, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
-        $statement = $this->table->truncate();
+        $truncate = $this->table->truncate();
+        $this->assertInstanceOf(SqlTruncate::class, $truncate);
+        $statement = $truncate->build();
         $this->assertInstanceOf(PDOStatement::class, $statement);
         $statement->execute();
         $this->assertEquals(0, Database::pdo()->query("SELECT * FROM " . self::TABLE)->rowCount());
