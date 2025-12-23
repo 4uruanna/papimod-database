@@ -23,6 +23,11 @@ final class StatementTableBuilder
         return new StatementDropBuilder($this->table);
     }
 
+    public function select(string ...$column): StatementSelectBuilder
+    {
+        return new StatementSelectBuilder($this->table, ...$column);
+    }
+
     public function truncate(): StatementTruncateBuilder
     {
         return new StatementTruncateBuilder($this->table);

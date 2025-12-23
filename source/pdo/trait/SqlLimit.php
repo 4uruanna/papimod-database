@@ -1,6 +1,6 @@
 <?php
 
-namespace Papimod\Database\sql\trait;
+namespace Papimod\Database\pdo\trait;
 
 trait SqlLimit
 {
@@ -12,7 +12,7 @@ trait SqlLimit
         $offset = $offset > 0 ? $offset : 0;
 
         if ($limit > 0 || $offset > 0) {
-            $this->limit_query = " LIMIT $limit OFFSET $offset ";
+            $this->limit_query = "LIMIT $limit OFFSET $offset";
         }
 
         return $this;
