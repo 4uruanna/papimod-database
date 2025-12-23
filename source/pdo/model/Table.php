@@ -7,7 +7,8 @@ class Table
     public function __construct(
         public readonly string $name,
         public readonly string $alias = ''
-    ) {}
+    ) {
+    }
 
     public function __toString()
     {

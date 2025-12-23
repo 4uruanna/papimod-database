@@ -11,7 +11,8 @@ class Bind
         public readonly string $key,
         public mixed $value = null,
         public Type $type = Type::STRING
-    ) {}
+    ) {
+    }
 
 
     public function bind(PDOStatement $statement): void

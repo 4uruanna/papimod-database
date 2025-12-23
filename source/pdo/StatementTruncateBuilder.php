@@ -8,7 +8,9 @@ use PDOStatement;
 
 final class StatementTruncateBuilder
 {
-    public function __construct(public readonly Table $table) {}
+    public function __construct(public readonly Table $table)
+    {
+    }
 
     public function build(): PDOStatement
     {
