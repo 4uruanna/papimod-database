@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f39a5ea3b538d5737af006a1d96f5dbd",
+    "content-hash": "078784e5b442b324b6cdf4a6fe3449a9",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -237,16 +237,16 @@
         },
         {
             "name": "papi/papi",
-            "version": "v1.1.1",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/4uruanna/papi.git",
-                "reference": "1e34136ab512de8684c6753f2136b97eb009e67b"
+                "reference": "f6d6486afeebf998113a035b94913f47657d5e38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/4uruanna/papi/zipball/1e34136ab512de8684c6753f2136b97eb009e67b",
-                "reference": "1e34136ab512de8684c6753f2136b97eb009e67b",
+                "url": "https://api.github.com/repos/4uruanna/papi/zipball/f6d6486afeebf998113a035b94913f47657d5e38",
+                "reference": "f6d6486afeebf998113a035b94913f47657d5e38",
                 "shasum": ""
             },
             "require": {
@@ -279,26 +279,120 @@
             "description": "Slim Framework Builder",
             "support": {
                 "issues": "https://github.com/4uruanna/papi/issues",
-                "source": "https://github.com/4uruanna/papi/tree/v1.1.1"
+                "source": "https://github.com/4uruanna/papi/tree/v2.1.1"
             },
-            "time": "2025-12-09T18:33:31+00:00"
+            "time": "2025-12-22T15:45:52+00:00"
         },
         {
-            "name": "papimod/dotenv",
-            "version": "v1.1.0",
+            "name": "papimod/cache",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/4uruanna/papimod-dotenv.git",
-                "reference": "2a70c23a1a111e6cb0b94fbf2115f4007835b47e"
+                "url": "https://github.com/4uruanna/papimod-cache.git",
+                "reference": "faa77db98c6590612fa3ac1d9417a99c8eb1e511"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/4uruanna/papimod-dotenv/zipball/2a70c23a1a111e6cb0b94fbf2115f4007835b47e",
-                "reference": "2a70c23a1a111e6cb0b94fbf2115f4007835b47e",
+                "url": "https://api.github.com/repos/4uruanna/papimod-cache/zipball/faa77db98c6590612fa3ac1d9417a99c8eb1e511",
+                "reference": "faa77db98c6590612fa3ac1d9417a99c8eb1e511",
                 "shasum": ""
             },
             "require": {
-                "papi/papi": "^1.1.0",
+                "papi/papi": "^2.1.0",
+                "papimod/dotenv": "^2.1.0",
+                "php": ">=8.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^12.4",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Papimod\\Cache\\": "source/",
+                    "Papimod\\Cache\\Test\\": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "4uruanna",
+                    "email": "adrien@villalonga.software"
+                }
+            ],
+            "description": "Module Papi",
+            "support": {
+                "issues": "https://github.com/4uruanna/papimod-cache/issues",
+                "source": "https://github.com/4uruanna/papimod-cache/tree/v2.1.0"
+            },
+            "time": "2025-12-22T23:11:11+00:00"
+        },
+        {
+            "name": "papimod/date",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/4uruanna/papimod-date.git",
+                "reference": "6d45cacd2f9655160cae06ebf8c3c5eb40052d18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/4uruanna/papimod-date/zipball/6d45cacd2f9655160cae06ebf8c3c5eb40052d18",
+                "reference": "6d45cacd2f9655160cae06ebf8c3c5eb40052d18",
+                "shasum": ""
+            },
+            "require": {
+                "papi/papi": "^2.1.0",
+                "papimod/dotenv": "^2.1.0",
+                "php": ">=8.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^12.4",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Papimod\\Date\\": "source/",
+                    "Papimod\\Date\\Test\\": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "4uruanna",
+                    "email": "adrien@villalonga.software"
+                }
+            ],
+            "description": "Module Papi",
+            "support": {
+                "issues": "https://github.com/4uruanna/papimod-date/issues",
+                "source": "https://github.com/4uruanna/papimod-date/tree/v2.1.0"
+            },
+            "time": "2025-12-18T15:24:10+00:00"
+        },
+        {
+            "name": "papimod/dotenv",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/4uruanna/papimod-dotenv.git",
+                "reference": "e78379831a6f18ce79b134dbff49cc00f9261697"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/4uruanna/papimod-dotenv/zipball/e78379831a6f18ce79b134dbff49cc00f9261697",
+                "reference": "e78379831a6f18ce79b134dbff49cc00f9261697",
+                "shasum": ""
+            },
+            "require": {
+                "papi/papi": "^2.1.0",
                 "php": ">=8.3.0",
                 "vlucas/phpdotenv": "^5.6.2"
             },
@@ -326,9 +420,9 @@
             "description": "Module Papi",
             "support": {
                 "issues": "https://github.com/4uruanna/papimod-dotenv/issues",
-                "source": "https://github.com/4uruanna/papimod-dotenv/tree/v1.1.0"
+                "source": "https://github.com/4uruanna/papimod-dotenv/tree/v2.1.0"
             },
-            "time": "2025-12-08T15:27:55+00:00"
+            "time": "2025-12-18T14:37:30+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -2048,16 +2142,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.2",
+            "version": "12.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "06713c2633d6d832f2fe98a70511ecaa7cb92c1a"
+                "reference": "4ba0e923f9d3fc655de22f9547c01d15a41fc93a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/06713c2633d6d832f2fe98a70511ecaa7cb92c1a",
-                "reference": "06713c2633d6d832f2fe98a70511ecaa7cb92c1a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4ba0e923f9d3fc655de22f9547c01d15a41fc93a",
+                "reference": "4ba0e923f9d3fc655de22f9547c01d15a41fc93a",
                 "shasum": ""
             },
             "require": {
@@ -2125,7 +2219,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.4"
             },
             "funding": [
                 {
@@ -2149,7 +2243,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-08T07:22:32+00:00"
+            "time": "2025-12-15T06:05:34+00:00"
         },
         {
             "name": "sebastian/cli-parser",
