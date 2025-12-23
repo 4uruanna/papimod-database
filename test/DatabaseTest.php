@@ -4,7 +4,6 @@ namespace Papimod\Database\Test;
 
 use Dotenv\Dotenv;
 use Papimod\Database\Database;
-use Papimod\Database\DatabaseModule;
 use PDO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
@@ -18,7 +17,13 @@ final class DatabaseTest extends TestCase
     {
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->load();
-        DatabaseModule::configure();
+
+        defined("PAPI_DATABASE_HOST") || define("PAPI_DATABASE_HOST", $_ENV['DATABASE_HOST']);
+        defined("PAPI_DATABASE_PORT") || define("PAPI_DATABASE_PORT", (int) ($_ENV['DATABASE_PORT']));
+        defined("PAPI_DATABASE_USER") || define("PAPI_DATABASE_USER", $_ENV["DATABASE_USER"]);
+        defined("PAPI_DATABASE_PASSWORD") || define("PAPI_DATABASE_PASSWORD", $_ENV["DATABASE_PASSWORD"]);
+        defined("PAPI_DATABASE_CHARSET") || define("PAPI_DATABASE_CHARSET", $_ENV["DATABASE_CHARSET"]);
+        defined("PAPI_DATABASE_NAME") || define("PAPI_DATABASE_NAME", $_ENV["DATABASE_NAME"]);
     }
 
     public function testConnection(): void
