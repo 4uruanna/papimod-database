@@ -2,7 +2,7 @@
 
 namespace Papimod\Database;
 
-use Papimod\Database\query\StatementTableBuilder;
+use Papimod\Database\pdo\StatementTableBuilder;
 
 final class StatementBuilder
 {
