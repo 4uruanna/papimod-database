@@ -47,7 +47,7 @@ final class DatabaseModule extends PapiModule
             || define("PAPI_DATABASE_CHARSET", $_ENV["DATABASE_CHARSET"] ?? "utf8mb4");
 
         defined("PAPI_DATABASE_NAME")
-            || define("DATABASE_NAME", $_ENV["DATABASE_NAME"]);
+            || define("PAPI_DATABASE_NAME", $_ENV["DATABASE_NAME"]);
 
         if (defined("DATABASE_MIGRATION_DIRECTORY") === false) {
             $directory = null;

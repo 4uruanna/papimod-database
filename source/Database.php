@@ -17,12 +17,12 @@ final class Database
         if (isset(Database::$pdo) === false) {
             Database::$pdo = new PDO(
                 "mysql:"
-                    . "host=" . DATABASE_HOST . ";"
-                    . "port=" . DATABASE_PORT . ";"
-                    . "dbname=" . DATABASE_NAME  . ";"
-                    . "charset=" .  DATABASE_CHARSET,
-                DATABASE_USER,
-                DATABASE_PASSWORD,
+                    . "host=" . PAPI_DATABASE_HOST . ";"
+                    . "port=" . PAPI_DATABASE_PORT . ";"
+                    . "dbname=" . PAPI_DATABASE_NAME  . ";"
+                    . "charset=" .  PAPI_DATABASE_CHARSET,
+                PAPI_DATABASE_USER,
+                PAPI_DATABASE_PASSWORD,
                 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
             );
         }
@@ -47,8 +47,9 @@ final class Database
         $is_committed = Database::$transaction_lock === true && Database::$transaction_id === $id;
 
         if ($is_committed) {
-            Database::pdo()->commit();
+            Database::$pdo->commit();
             Database::$transaction_lock = false;
+            Database::$transaction_id++;
         }
 
         return $is_committed;
@@ -59,8 +60,9 @@ final class Database
         $is_rollbacked = Database::$transaction_lock === true && Database::$transaction_id === $id;
 
         if (Database::$transaction_lock === true && Database::$transaction_id === $id) {
-            Database::pdo()->rollBack();
+            Database::$pdo->rollBack();
             Database::$transaction_lock = false;
+            Database::$transaction_id++;
         }
 
         return $is_rollbacked;

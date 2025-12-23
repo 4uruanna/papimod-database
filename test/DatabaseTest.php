@@ -2,18 +2,30 @@
 
 namespace Papimod\Database\Test;
 
+use Dotenv\Dotenv;
 use Papimod\Database\Database;
+use Papimod\Database\DatabaseModule;
 use PDO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Medium;
+use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Database::class)]
 #[Medium]
-final class DatabaseTest extends DatabaseTestCase
+final class DatabaseTest extends TestCase
 {
-    public function testDatabaseConnection(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->assertInstanceOf(PDO::class, Database::pdo());
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
+        DatabaseModule::configure();
+    }
+
+    public function testConnection(): void
+    {
+        $pdo = Database::pdo();
+        $this->assertInstanceOf(PDO::class, $pdo);
+        $this->assertEquals($pdo, Database::pdo());
     }
 
     public function testCommitTransaction(): void
@@ -22,6 +34,8 @@ final class DatabaseTest extends DatabaseTestCase
         $transaction_id_b = Database::beginTransaction();
         $this->assertFalse(Database::commit($transaction_id_b));
         $this->assertTrue(Database::commit($transaction_id_a));
+        $this->assertFalse(Database::commit($transaction_id_b));
+        $this->assertFalse(Database::commit($transaction_id_a));
     }
 
     public function testRollbackTransaction(): void
@@ -30,24 +44,7 @@ final class DatabaseTest extends DatabaseTestCase
         $transaction_id_b = Database::beginTransaction();
         $this->assertFalse(Database::rollback($transaction_id_b));
         $this->assertTrue(Database::rollback($transaction_id_a));
-    }
-
-    public function testPreventReUseTransaction(): void
-    {
-        $transaction_id = Database::beginTransaction();
-        $this->assertTrue(Database::commit($transaction_id));
-        $this->assertFalse(Database::commit($transaction_id));
-
-        $transaction_id = Database::beginTransaction();
-        $this->assertTrue(Database::rollback($transaction_id));
-        $this->assertFalse(Database::rollback($transaction_id));
-
-        $transaction_id = Database::beginTransaction();
-        $this->assertTrue(Database::commit($transaction_id));
-        $this->assertFalse(Database::rollback($transaction_id));
-
-        $transaction_id = Database::beginTransaction();
-        $this->assertTrue(Database::rollback($transaction_id));
-        $this->assertFalse(Database::commit($transaction_id));
+        $this->assertFalse(Database::rollback($transaction_id_b));
+        $this->assertFalse(Database::rollback($transaction_id_a));
     }
 }
