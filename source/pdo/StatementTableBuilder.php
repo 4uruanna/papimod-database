@@ -1,8 +1,8 @@
 <?php
 
-namespace Papimod\Database\query;
+namespace Papimod\Database\pdo;
 
-use Papimod\Database\query\model\Table;
+use Papimod\Database\pdo\model\Table;
 
 final class StatementTableBuilder
 {

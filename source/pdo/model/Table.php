@@ -1,6 +1,6 @@
 <?php
 
-namespace Papimod\Database\query\model;
+namespace Papimod\Database\pdo\model;
 
 class Table
 {

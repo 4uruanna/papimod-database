@@ -1,9 +1,9 @@
 <?php
 
-namespace Papimod\Database\query;
+namespace Papimod\Database\pdo;
 
-use Papimod\Database\database\Database;
-use Papimod\Database\query\model\Table;
+use Papimod\Database\Database;
+use Papimod\Database\pdo\model\Table;
 use PDOStatement;
 
 final class StatementTruncateBuilder
