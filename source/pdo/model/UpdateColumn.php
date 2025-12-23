@@ -22,14 +22,6 @@ class UpdateColumn extends Bind implements IColumn
         return new UpdateColumn($name, $value, Type::BOOLEAN);
     }
 
-    private static int $uid = 0;
-
-    private static function generateUniqueKey(): int
-    {
-        self::$uid++;
-        return ":update_" . self::$uid;
-    }
-
     public function __construct(
         public readonly string $name,
         mixed $value,

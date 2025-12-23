@@ -22,14 +22,6 @@ class InsertColumn extends Bind implements IColumn
         return new InsertColumn($name, $value, Type::BOOLEAN);
     }
 
-    private static int $uid = 0;
-
-    private static function generateUniqueKey(): int
-    {
-        self::$uid++;
-        return ":insert_" . self::$uid;
-    }
-
     public function __construct(
         public readonly string $name,
         mixed $value,

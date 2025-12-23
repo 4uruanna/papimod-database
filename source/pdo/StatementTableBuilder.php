@@ -3,6 +3,7 @@
 namespace Papimod\Database\pdo;
 
 use Papimod\Database\pdo\model\Column;
+use Papimod\Database\pdo\model\InsertColumn;
 use Papimod\Database\pdo\model\Table;
 use Papimod\Database\pdo\model\UpdateColumn;
 
@@ -23,6 +24,11 @@ final class StatementTableBuilder
     public function drop(): StatementDropBuilder
     {
         return new StatementDropBuilder($this->table);
+    }
+
+    public function insert(InsertColumn ...$column): StatementInsertBuilder
+    {
+        return new StatementInsertBuilder($this->table, ...$column);
     }
 
     public function select(Column|string ...$column): StatementSelectBuilder
