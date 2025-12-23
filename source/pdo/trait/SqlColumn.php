@@ -2,21 +2,22 @@
 
 namespace Papimod\Database\pdo\trait;
 
-use Papimod\Database\pdo\interface\IColumn;
 use Papimod\Database\pdo\model\Column;
+use Papimod\Database\pdo\model\UpdateColumn;
+use PDOStatement;
 
 trait SqlColumn
 {
-    /** @var IColumn[] */
+    /** @var Column|UpdateColumn[] */
     private array $columns = [];
 
-    private function addColumn(Column|string ...$column)
+    private function addColumn(Column|UpdateColumn|string ...$column)
     {
         foreach ($column as $c) {
-            if (is_string($column)) {
-                $this->columns[] = new Column($column);
+            if (is_string($c)) {
+                $this->columns[] = new Column($c);
             } else {
-                $this->columns[] = $column;
+                $this->columns[] = $c;
             }
         }
     }
@@ -30,5 +31,14 @@ trait SqlColumn
         }
 
         return $result;
+    }
+
+    public function bindColumns(PDOStatement $statement): void
+    {
+        foreach ($this->columns as $column) {
+            if ($column instanceof UpdateColumn) {
+                $column->bind($statement);
+            }
+        }
     }
 }

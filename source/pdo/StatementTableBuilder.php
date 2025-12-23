@@ -2,7 +2,9 @@
 
 namespace Papimod\Database\pdo;
 
+use Papimod\Database\pdo\model\Column;
 use Papimod\Database\pdo\model\Table;
+use Papimod\Database\pdo\model\UpdateColumn;
 
 final class StatementTableBuilder
 {
@@ -23,7 +25,7 @@ final class StatementTableBuilder
         return new StatementDropBuilder($this->table);
     }
 
-    public function select(string ...$column): StatementSelectBuilder
+    public function select(Column|string ...$column): StatementSelectBuilder
     {
         return new StatementSelectBuilder($this->table, ...$column);
     }
@@ -31,5 +33,10 @@ final class StatementTableBuilder
     public function truncate(): StatementTruncateBuilder
     {
         return new StatementTruncateBuilder($this->table);
+    }
+
+    public function update(UpdateColumn ...$column): StatementUpdateBuilder
+    {
+        return new StatementUpdateBuilder($this->table, ...$column);
     }
 }

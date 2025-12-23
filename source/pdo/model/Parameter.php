@@ -30,7 +30,7 @@ final class Parameter extends Bind
         $query = "{$this->column} {$this->operator->value} ";
 
         if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
-            if ($this->operator === Operator::IN || $this->operator === Operator::NOT_IN) {
+            if ($this->operator === Operator::IS_IN || $this->operator === Operator::IS_NOT_IN) {
                 $c = count($this->value);
                 $query .= " (";
 
@@ -54,7 +54,7 @@ final class Parameter extends Bind
     public function bind(PDOStatement $statement): void
     {
         if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
-            if ($this->operator === Operator::IN || $this->operator === Operator::NOT_IN) {
+            if ($this->operator === Operator::IS_IN || $this->operator === Operator::IS_NOT_IN) {
                 $ic = count($this->value);
 
                 for ($i = 0; $i < $ic; $i++) {
