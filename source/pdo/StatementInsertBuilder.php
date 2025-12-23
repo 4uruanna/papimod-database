@@ -3,22 +3,18 @@
 namespace Papimod\Database\pdo;
 
 use Papimod\Database\Database;
+use Papimod\Database\pdo\model\InsertColumn;
 use Papimod\Database\pdo\model\Table;
-use Papimod\Database\pdo\model\UpdateColumn;
 use Papimod\Database\pdo\trait\SqlColumn;
-use Papimod\Database\pdo\trait\SqlJoin;
-use Papimod\Database\pdo\trait\SqlWhere;
 use PDOStatement;
 
-final class StatementUpdateBuilder
+final class StatementInsertBuilder
 {
-    use SqlWhere;
-    use SqlJoin;
     use SqlColumn;
 
     public function __construct(
         public readonly Table $table,
-        UpdateColumn ...$column
+        InsertColumn ...$column
     ) {
         $this->addColumn(...$column);
     }
@@ -29,20 +25,18 @@ final class StatementUpdateBuilder
 
         $statement = $pdo->prepare(
             <<<SQL
-            UPDATE {$this->table}
-            {$this->join_query}
-            SET
-            {$this->setQuery()}
-            {$this->whereQuery()}
+            INSERT INTO {$this->table}
+            ( {$this->columnQuery()} )
+            VALUES 
+            ( {$this->valueQuery()} )
             SQL
         );
 
         $this->bindColumns($statement);
-        $this->bindParameters($statement);
         return $statement;
     }
 
-    private function setQuery(): string
+    public function valueQuery(): string
     {
         return implode(', ', $this->columns);
     }
