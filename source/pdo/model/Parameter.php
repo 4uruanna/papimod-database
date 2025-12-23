@@ -1,55 +1,33 @@
 <?php
 
-namespace Papimod\Database\sql\model;
+namespace Papimod\Database\pdo\model;
 
-use Papimod\Database\sql\enumerator\Operator;
-use Papimod\Database\sql\enumerator\Type;
+use Papimod\Database\pdo\enumerator\Operator;
 use PDOStatement;
 
-final class WhereParameter
+final class Parameter extends Bind
 {
-    private const PREFIX = ":where_parameter_";
+    private static int $uid = 0;
 
-    private static int $UID = 0;
-    private static function getUID(): int
+    private static function generateUniqueKey(): int
     {
-        return self::$UID++;
+        self::$uid++;
+        return ":parameter_" . self::$uid;
     }
 
-    private readonly string $column;
-    private readonly int $query_index;
+    public readonly string $column;
 
-    private string $operator;
-    private mixed $value;
-    private int $type = Type::STRING;
+    public Operator $operator;
 
     public function __construct(string $column)
     {
+        parent::__construct(self::generateUniqueKey());
         $this->column = $column;
-        $this->query_index = self::getUID();
-    }
-
-    public function setValue(mixed $value): self
-    {
-        $this->value = $value;
-        return $this;
-    }
-
-    public function setType(int $type): self
-    {
-        $this->type = $type;
-        return $this;
-    }
-
-    public function setOperator(string $operator): self
-    {
-        $this->operator = $operator;
-        return $this;
     }
 
     public function __toString(): string
     {
-        $query = "{$this->column} {$this->operator} ";
+        $query = "{$this->column} {$this->operator->value} ";
 
         if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
             if ($this->operator === Operator::IN || $this->operator === Operator::NOT_IN) {
@@ -57,7 +35,7 @@ final class WhereParameter
                 $query .= " (";
 
                 for ($i = 0; $i < $c; $i++) {
-                    $query .= self::PREFIX . $this->query_index . "_$i";
+                    $query .= $this->key . "_$i";
 
                     if ($i < $c - 1) {
                         $query .= ", ";
@@ -66,7 +44,7 @@ final class WhereParameter
 
                 $query .= ")";
             } else {
-                $query .= self::PREFIX . $this->query_index;
+                $query .= $this->key;
             }
         }
 
@@ -81,16 +59,16 @@ final class WhereParameter
 
                 for ($i = 0; $i < $ic; $i++) {
                     $statement->bindValue(
-                        self::PREFIX . $this->query_index . "_$i",
+                        $this->key . "_$i",
                         $this->value[$i],
-                        $this->type
+                        $this->type->value
                     );
                 }
             } else {
                 $statement->bindValue(
-                    self::PREFIX . $this->query_index,
+                    $this->key,
                     $this->value,
-                    $this->type
+                    $this->type->value
                 );
             }
         }

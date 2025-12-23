@@ -13,6 +13,11 @@ final class StatementTableBuilder
         $this->table = new Table($name, $alias);
     }
 
+    public function delete(): StatementDeleteBuilder
+    {
+        return new StatementDeleteBuilder($this->table);
+    }
+
     public function drop(): StatementDropBuilder
     {
         return new StatementDropBuilder($this->table);
