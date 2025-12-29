@@ -120,4 +120,18 @@ final class StatementInsertBuilderTest extends TestCase
         $statement->execute();
         $this->assertEquals($formatted, $statement->fetch(PDO::FETCH_ASSOC)["time"]);
     }
+
+    public function testInsertBlob(): void
+    {
+        $blob = file_get_contents(__DIR__ . "/../assets/white-blob.png");
+
+        StatementBuilder::from($this->table_name)
+            ->insert(new Column("blob", $blob, Type::BLOB))
+            ->build()
+            ->execute();
+
+        $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name} WHERE ID = 1");
+        $statement->execute();
+        $this->assertEquals($blob, $statement->fetch(PDO::FETCH_ASSOC)["blob"]);
+    }
 }
