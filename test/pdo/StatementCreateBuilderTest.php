@@ -41,7 +41,7 @@ final class StatementCreateBuilderTest extends TestCase
             ->build()
             ->execute();
 
-        $value = self::$faker->name();
+        $value = self::$faker->userName();
         Database::pdo()->query("INSERT INTO {$this->table_name} (POO) VALUES ('{$value}')")->execute();
         $statement = Database::pdo()->query("SELECT * FROM {$this->table_name}");
         $statement->execute();
@@ -60,7 +60,7 @@ final class StatementCreateBuilderTest extends TestCase
             ->build()
             ->execute();
 
-        $value = self::$faker->name();
+        $value = self::$faker->userName();
         Database::pdo()->query("INSERT INTO {$this->table_name} (POO) VALUES ('{$value}')")->execute();
         $statement = Database::pdo()->query("SELECT * FROM {$this->table_name} WHERE ID = 1");
         $statement->execute();
