@@ -52,6 +52,8 @@ final class StatementCreateBuilder
                     if (strlen($c->default)) {
                         $query .= " DEFAULT {$c->default}";
                     }
+
+                    return $query;
                 },
                 $this->columns
             )
