@@ -30,8 +30,8 @@ final class StatementCreateBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        Database::pdo()->exec("DROP TABLE IF EXISTS {$this->table_name_foo}");
-        Database::pdo()->exec("DROP TABLE IF EXISTS {$this->table_name}");
+        Database::pdo()->query("DROP TABLE IF EXISTS {$this->table_name_foo}")->execute();
+        Database::pdo()->query("DROP TABLE IF EXISTS {$this->table_name}")->execute();
     }
 
     public function testCreateTable(): void
