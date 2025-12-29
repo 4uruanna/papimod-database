@@ -1,9 +1,11 @@
 <?php
 
-namespace Papimod\Database\Test;
+namespace Papimod\Database\Test\pdo;
 
-use Papimod\Database\pdo\model\InsertColumn;
-use Papimod\Database\pdo\model\UpdateColumn;
+use Papimod\Database\pdo\enumerator\Type;
+use Papimod\Database\pdo\model\Column;
+use Papimod\Database\pdo\model\PrimaryKey;
+use Papimod\Database\pdo\StatementCreateBuilder;
 use Papimod\Database\pdo\StatementDeleteBuilder;
 use Papimod\Database\pdo\StatementDropBuilder;
 use Papimod\Database\pdo\StatementInsertBuilder;
@@ -22,6 +24,15 @@ final class StatementTableBuilderTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$builder = new StatementTableBuilder('foo');
+    }
+
+    public function testCreate(): void
+    {
+        $this->assertInstanceOf(
+            StatementCreateBuilder::class,
+            self::$builder->create(new Column("ID", null, Type::INT, false, true, true))
+                ->constraint(new PrimaryKey("ID"))
+        );
     }
 
     public function testDelete(): void
@@ -44,7 +55,7 @@ final class StatementTableBuilderTest extends TestCase
     {
         $this->assertInstanceOf(
             StatementInsertBuilder::class,
-            self::$builder->insert(InsertColumn::INT("FOO", 0))
+            self::$builder->insert(new Column("FOO", 123, Type::INT))
         );
     }
 
@@ -68,7 +79,7 @@ final class StatementTableBuilderTest extends TestCase
     {
         $this->assertInstanceOf(
             StatementUpdateBuilder::class,
-            self::$builder->update(UpdateColumn::INT("FOO", 0))
+            self::$builder->update(new Column("FOO", 321, Type::INT))
         );
     }
 }
