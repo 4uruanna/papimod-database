@@ -38,6 +38,9 @@ final class StatementInsertBuilder
 
     public function valueQuery(): string
     {
-        return implode(', ', $this->columns);
+        return implode(
+            ', ',
+            array_map(fn($c) => $c->key, $this->columns)
+        );
     }
 }

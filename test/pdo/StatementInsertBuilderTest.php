@@ -9,6 +9,8 @@ use Papimod\Database\pdo\enumerator\Type;
 use Papimod\Database\pdo\model\Column;
 use Papimod\Database\pdo\StatementInsertBuilder;
 use Papimod\Database\StatementBuilder;
+use Papimod\Date\DateModule;
+use Papimod\Date\DateService;
 use PDO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -17,10 +19,13 @@ use PHPUnit\Framework\TestCase;
 final class StatementInsertBuilderTest extends TestCase
 {
     private static Generator $faker;
+    private static DateService $date_service;
 
     public static function setUpBeforeClass(): void
     {
         self::$faker = Factory::create();
+        self::$date_service = new DateService();
+        DateModule::configure();
     }
 
     private string $table_name = "statement_insert_builder_test";
@@ -34,7 +39,9 @@ final class StatementInsertBuilderTest extends TestCase
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
                 `string` TEXT,
                 `decimal` DECIMAL(20, 10),
-                `date` DATETIME,
+                `date_time` DATETIME,
+                `date` DATE,
+                `time` TIME,
                 `blob` BLOB,
                 PRIMARY KEY (`id`)
             )
@@ -59,7 +66,7 @@ final class StatementInsertBuilderTest extends TestCase
     {
         $sample = self::$faker->randomFloat(6, 1, 2);
 
-        $s = StatementBuilder::from($this->table_name)
+        StatementBuilder::from($this->table_name)
             ->insert(new Column("decimal", $sample, Type::DOUBLE))
             ->build()
             ->execute();
@@ -67,5 +74,50 @@ final class StatementInsertBuilderTest extends TestCase
         $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name} WHERE ID = 1");
         $statement->execute();
         $this->assertEquals($sample, $statement->fetch(PDO::FETCH_ASSOC)["decimal"]);
+    }
+
+    public function testInsertDateTime(): void
+    {
+        $sample = self::$faker->dateTime();
+        $formatted = self::$date_service->format($sample);
+
+        StatementBuilder::from($this->table_name)
+            ->insert(new Column("date_time", $sample, Type::DATETIME))
+            ->build()
+            ->execute();
+
+        $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name} WHERE ID = 1");
+        $statement->execute();
+        $this->assertEquals($formatted, $statement->fetch(PDO::FETCH_ASSOC)["date_time"]);
+    }
+
+    public function testInsertDate(): void
+    {
+        $sample = self::$faker->dateTime();
+        $formatted = self::$date_service->formatDate($sample);
+
+        StatementBuilder::from($this->table_name)
+            ->insert(new Column("date", $sample, Type::DATE))
+            ->build()
+            ->execute();
+
+        $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name} WHERE ID = 1");
+        $statement->execute();
+        $this->assertEquals($formatted, $statement->fetch(PDO::FETCH_ASSOC)["date"]);
+    }
+
+    public function testInsertTime(): void
+    {
+        $sample = self::$faker->dateTime();
+        $formatted = self::$date_service->formatTime($sample);
+
+        StatementBuilder::from($this->table_name)
+            ->insert(new Column("time", $sample, Type::TIME))
+            ->build()
+            ->execute();
+
+        $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name} WHERE ID = 1");
+        $statement->execute();
+        $this->assertEquals($formatted, $statement->fetch(PDO::FETCH_ASSOC)["time"]);
     }
 }

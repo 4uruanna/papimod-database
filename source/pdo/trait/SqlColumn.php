@@ -26,7 +26,7 @@ trait SqlColumn
         $result = '*';
 
         if (count($this->columns)) {
-            $result = implode(', ', array_map(fn($c) => $c->name, $this->columns));
+            $result = implode(', ', array_map(fn($c) => "`{$c->name}`", $this->columns));
         }
 
         return $result;
