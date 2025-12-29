@@ -2,12 +2,25 @@
 
 namespace Papimod\Database\pdo\enumerator;
 
-use PDO;
-
-enum Type: int
+enum Type: string
 {
-    case NULL = PDO::PARAM_NULL;
-    case INTEGER = PDO::PARAM_INT;
-    case STRING = PDO::PARAM_STR;
-    case BOOLEAN = PDO::PARAM_BOOL;
+    case TEXT_LONG = "LONGTEXT";
+    case TEXT = "TEXT";
+    case TEXT_TINY = "TINYTEXT";
+
+    case INT_BIG = "BIGINT";
+    case INT = "INT";
+    case INT_TINY = "TINYINT";
+
+    case BLOB_LONG = "LONGBLOB";
+    case BLOB = "BLOB";
+    case BLOB_TINY = "TINYBLOB";
+
+    case DOUBLE = "DOUBLE";
+    case DECIMAL = "DECIMAL";
+    case FLOAT = "FLOAT";
+
+    case DATE = "DATE";
+    case DATETIME = "DATETIME";
+    case TIME = "TIME";
 }

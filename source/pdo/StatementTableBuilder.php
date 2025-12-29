@@ -3,9 +3,7 @@
 namespace Papimod\Database\pdo;
 
 use Papimod\Database\pdo\model\Column;
-use Papimod\Database\pdo\model\InsertColumn;
 use Papimod\Database\pdo\model\Table;
-use Papimod\Database\pdo\model\UpdateColumn;
 
 final class StatementTableBuilder
 {
@@ -14,6 +12,11 @@ final class StatementTableBuilder
     public function __construct(string $name, string $alias = '')
     {
         $this->table = new Table($name, $alias);
+    }
+
+    public function create(Column ...$column): StatementCreateBuilder
+    {
+        return new StatementCreateBuilder($this->table, ...$column);
     }
 
     public function delete(): StatementDeleteBuilder
@@ -26,7 +29,7 @@ final class StatementTableBuilder
         return new StatementDropBuilder($this->table);
     }
 
-    public function insert(InsertColumn ...$column): StatementInsertBuilder
+    public function insert(Column ...$column): StatementInsertBuilder
     {
         return new StatementInsertBuilder($this->table, ...$column);
     }
@@ -41,7 +44,7 @@ final class StatementTableBuilder
         return new StatementTruncateBuilder($this->table);
     }
 
-    public function update(UpdateColumn ...$column): StatementUpdateBuilder
+    public function update(Column ...$column): StatementUpdateBuilder
     {
         return new StatementUpdateBuilder($this->table, ...$column);
     }

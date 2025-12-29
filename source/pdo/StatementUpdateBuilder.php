@@ -3,8 +3,8 @@
 namespace Papimod\Database\pdo;
 
 use Papimod\Database\Database;
+use Papimod\Database\pdo\model\Column;
 use Papimod\Database\pdo\model\Table;
-use Papimod\Database\pdo\model\UpdateColumn;
 use Papimod\Database\pdo\trait\SqlColumn;
 use Papimod\Database\pdo\trait\SqlJoin;
 use Papimod\Database\pdo\trait\SqlWhere;
@@ -18,7 +18,7 @@ final class StatementUpdateBuilder
 
     public function __construct(
         public readonly Table $table,
-        UpdateColumn ...$column
+        Column ...$column
     ) {
         $this->addColumn(...$column);
     }

@@ -3,16 +3,14 @@
 namespace Papimod\Database\pdo\trait;
 
 use Papimod\Database\pdo\model\Column;
-use Papimod\Database\pdo\model\InsertColumn;
-use Papimod\Database\pdo\model\UpdateColumn;
 use PDOStatement;
 
 trait SqlColumn
 {
-    /** @var Column|UpdateColumn|InsertColumn[] */
+    /** @var Column[] */
     private array $columns = [];
 
-    private function addColumn(Column|UpdateColumn|InsertColumn|string ...$column)
+    private function addColumn(Column|string ...$column)
     {
         foreach ($column as $c) {
             if (is_string($c)) {
@@ -37,9 +35,7 @@ trait SqlColumn
     public function bindColumns(PDOStatement $statement): void
     {
         foreach ($this->columns as $column) {
-            if ($column instanceof UpdateColumn) {
-                $column->bind($statement);
-            }
+            $column->bind($statement);
         }
     }
 }

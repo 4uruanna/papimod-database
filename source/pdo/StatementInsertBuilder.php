@@ -3,7 +3,7 @@
 namespace Papimod\Database\pdo;
 
 use Papimod\Database\Database;
-use Papimod\Database\pdo\model\InsertColumn;
+use Papimod\Database\pdo\model\Column;
 use Papimod\Database\pdo\model\Table;
 use Papimod\Database\pdo\trait\SqlColumn;
 use PDOStatement;
@@ -14,7 +14,7 @@ final class StatementInsertBuilder
 
     public function __construct(
         public readonly Table $table,
-        InsertColumn ...$column
+        Column ...$column
     ) {
         $this->addColumn(...$column);
     }

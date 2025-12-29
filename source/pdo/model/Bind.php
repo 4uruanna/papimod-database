@@ -9,17 +9,20 @@ class Bind
 {
     private static int $uid = 0;
 
-    protected static function generateUniqueKey(string $prefix = ''): string
+    protected static function generateUniqueKey(): string
     {
         self::$uid++;
-        return ":{$prefix}_" . self::$uid;
+        return ":__b" . self::$uid;
     }
 
+    public readonly string $key;
+
     public function __construct(
-        public readonly string $key,
-        public mixed $value = null,
-        public Type $type = Type::STRING
-    ) {}
+        public mixed $value,
+        public Type $type
+    ) {
+        $this->key = Bind::generateUniqueKey();
+    }
 
 
     public function bind(PDOStatement $statement): void
