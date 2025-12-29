@@ -15,6 +15,7 @@ final class StatementDropBuilderTest extends TestCase
 
     public function setUp(): void
     {
+        Database::pdo()->query("DROP TABLE IF EXISTS {$this->table_name}")->execute();
         Database::pdo()->query("CREATE TABLE IF NOT EXISTS {$this->table_name} (poo INT NOT NULL)")->execute();
     }
 

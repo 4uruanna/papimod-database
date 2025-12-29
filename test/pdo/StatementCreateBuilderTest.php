@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(StatementCreateBuilder::class)]
 final class StatementCreateBuilderTest extends TestCase
 {
-    private string $table_name = "statement_create_builder_test";
-    private string $table_name_foo = "statement_create_builder_test_foo";
-
     private static Generator $faker;
 
     public static function setUpBeforeClass(): void
@@ -28,10 +25,18 @@ final class StatementCreateBuilderTest extends TestCase
         self::$faker = Factory::create();
     }
 
+    private string $table_name = "statement_create_builder_test";
+    private string $table_name_foo = "statement_create_builder_test_foo";
+
+    private string $user_name_a;
+    private string $user_name_b;
+
     public function setUp(): void
     {
         Database::pdo()->query("DROP TABLE IF EXISTS {$this->table_name_foo}")->execute();
         Database::pdo()->query("DROP TABLE IF EXISTS {$this->table_name}")->execute();
+        $this->user_name_a = self::$faker->userName();
+        $this->user_name_b = self::$faker->userName();
     }
 
     public function testCreateTable(): void
@@ -41,12 +46,14 @@ final class StatementCreateBuilderTest extends TestCase
             ->build()
             ->execute();
 
-        $value = self::$faker->userName();
-        Database::pdo()->query("INSERT INTO {$this->table_name} (POO) VALUES ('{$value}')")->execute();
+        Database::pdo()
+            ->prepare("INSERT INTO {$this->table_name} (POO) VALUES (:val)")
+            ->execute([":val" => $this->user_name_a]);
+
         $statement = Database::pdo()->query("SELECT * FROM {$this->table_name}");
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        $this->assertEquals($value, $result["POO"]);
+        $this->assertEquals($this->user_name_a, $result["POO"]);
     }
 
     public function testTableWithPrimaryKey(): void
@@ -60,12 +67,15 @@ final class StatementCreateBuilderTest extends TestCase
             ->build()
             ->execute();
 
-        $value = self::$faker->userName();
-        Database::pdo()->query("INSERT INTO {$this->table_name} (POO) VALUES ('{$value}')")->execute();
+        Database::pdo()
+            ->prepare("INSERT INTO {$this->table_name} (POO) VALUES (:val)")
+            ->execute([":val" => $this->user_name_a]);
+
         $statement = Database::pdo()->query("SELECT * FROM {$this->table_name} WHERE ID = 1");
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        $this->assertEquals($value, $result["POO"]);
+
+        $this->assertEquals($this->user_name_a, $result["POO"]);
     }
 
     public function testTablesWithForeignkey(): void
@@ -79,29 +89,30 @@ final class StatementCreateBuilderTest extends TestCase
             ->build()
             ->execute();
 
-        $s = StatementBuilder::from($this->table_name_foo)
+        StatementBuilder::from($this->table_name_foo)
             ->create(
-                new Column("ID", null, Type::INT, false, true, true),
                 new Column("FOO", null, Type::TEXT),
                 new Column("POO", null, Type::INT, false, true),
             )
             ->constraint(
-                new PrimaryKey("ID"),
                 new ForeignKey("POO", $this->table_name, "ID")
             )
-            ->build();
+            ->build()
+            ->execute();
 
-        $s->execute();
+        Database::pdo()
+            ->prepare("INSERT INTO {$this->table_name} (POO) VALUES (:val)")
+            ->execute([":val" => $this->user_name_a]);
 
-        $value = self::$faker->name();
-        Database::pdo()->query("INSERT INTO {$this->table_name} (POO) VALUES ('{$value}')")->execute();
 
-        $value_foo = self::$faker->name();
-        Database::pdo()->query("INSERT INTO {$this->table_name_foo} (FOO, POO) VALUES ('{$value_foo}', 1)")->execute();
+        Database::pdo()
+            ->prepare("INSERT INTO {$this->table_name_foo} (FOO, POO) VALUES (:val, 1)")
+            ->execute([":val" => $this->user_name_b]);
 
-        $statement = Database::pdo()->query("SELECT * FROM {$this->table_name_foo} WHERE ID = 1");
+        $statement = Database::pdo()->prepare("SELECT * FROM {$this->table_name_foo} WHERE FOO = :val");
+        $statement->bindValue(":val", $this->user_name_b);
         $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        $this->assertEquals(1, $result["POO"]);
+
+        $this->assertEquals(1, $statement->fetch(PDO::FETCH_ASSOC)["POO"]);
     }
 }
