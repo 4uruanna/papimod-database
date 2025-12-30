@@ -8,7 +8,8 @@ class ForeignKey
         public readonly string $column_name,
         public readonly string $reference_table,
         public readonly string $reference_column
-    ) {}
+    ) {
+    }
 
     public function __toString()
     {
