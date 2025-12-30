@@ -59,8 +59,8 @@ trait SqlWhere
 
     public function or(string $column): self
     {
-        $this->last_parameter_group = [];
-        $this->parameters[] = &$this->last_parameter_group;
+        $this->parameters[] = [];
+        $this->last_parameter_group = &$this->parameters[count($this->parameters) - 1];
         return $this->and($column);
     }
 
