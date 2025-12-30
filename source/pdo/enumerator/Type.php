@@ -23,4 +23,6 @@ enum Type: string
     case DATE = "DATE";
     case DATETIME = "DATETIME";
     case TIME = "TIME";
+
+    case NULL = "NULL";
 }

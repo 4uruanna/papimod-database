@@ -25,6 +25,8 @@ final class PdoType
 
         "DATE" => PDO::PARAM_STR,
         "DATETIME" => PDO::PARAM_STR,
-        "TIME" => PDO::PARAM_STR
+        "TIME" => PDO::PARAM_STR,
+
+        "NULL" => PDO::PARAM_NULL
     ];
 }
