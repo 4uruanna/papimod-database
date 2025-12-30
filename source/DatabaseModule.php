@@ -24,8 +24,7 @@ final class DatabaseModule extends PapiModule
         return [
             DotEnvModule::class,
             DateModule::class,
-            CacheModule::class,
-            DateModule::class
+            CacheModule::class
         ];
     }
 
@@ -48,17 +47,5 @@ final class DatabaseModule extends PapiModule
 
         defined("PAPI_DATABASE_NAME")
             || define("PAPI_DATABASE_NAME", $_ENV["DATABASE_NAME"]);
-
-        if (defined("DATABASE_MIGRATION_DIRECTORY") === false) {
-            $directory = null;
-
-            if (isset($_ENV["DATABASE_MIGRATION_DIRECTORY"])) {
-                $directory = PAPI_DOTENV_DIRECTORY
-                    . DIRECTORY_SEPARATOR
-                    . trim($_ENV["DATABASE_MIGRATION_DIRECTORY"], DIRECTORY_SEPARATOR);
-            }
-
-            define("DATABASE_MIGRATION_DIRECTORY", $directory);
-        }
     }
 }
