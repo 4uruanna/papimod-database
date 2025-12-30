@@ -32,7 +32,7 @@ final class StatementUpdateBuilder
             UPDATE {$this->table}
             {$this->join_query}
             SET
-            {$this->setQuery()}
+            {$this->updateQuery()}
             {$this->whereQuery()}
             SQL
         );
@@ -42,8 +42,11 @@ final class StatementUpdateBuilder
         return $statement;
     }
 
-    private function setQuery(): string
+    private function updateQuery(): string
     {
-        return implode(', ', $this->columns);
+        return implode(
+            ', ',
+            array_map(fn($c) => "`{$c->name}` = {$c->key}", $this->columns)
+        );
     }
 }
