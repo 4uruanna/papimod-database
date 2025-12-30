@@ -21,7 +21,7 @@ final class Parameter extends Bind
 
     public function __toString(): string
     {
-        $query = "{$this->column} {$this->operator->value} ";
+        $query = "`{$this->column}` {$this->operator->value} ";
 
         if ($this->operator !== Operator::IS_NULL && $this->operator !== Operator::IS_NOT_NULL) {
             if ($this->operator === Operator::IS_IN || $this->operator === Operator::IS_NOT_IN) {
@@ -55,7 +55,7 @@ final class Parameter extends Bind
                     $statement->bindValue(
                         $this->key . "_$i",
                         $this->value[$i],
-                        $this->type->value
+                        PdoType::$values[$this->type->value]
                     );
                 }
             } else {
