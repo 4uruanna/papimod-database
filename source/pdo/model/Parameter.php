@@ -3,25 +3,19 @@
 namespace Papimod\Database\pdo\model;
 
 use Papimod\Database\pdo\enumerator\Operator;
+use Papimod\Database\pdo\enumerator\PdoType;
+use Papimod\Database\pdo\enumerator\Type;
 use PDOStatement;
 
 final class Parameter extends Bind
 {
-    private static int $uid = 0;
-
-    private static function generateUniqueKey(): int
-    {
-        self::$uid++;
-        return ":parameter_" . self::$uid;
-    }
-
     public readonly string $column;
 
     public Operator $operator;
 
     public function __construct(string $column)
     {
-        parent::__construct(self::generateUniqueKey());
+        parent::__construct(null, Type::TEXT);
         $this->column = $column;
     }
 
@@ -68,7 +62,7 @@ final class Parameter extends Bind
                 $statement->bindValue(
                     $this->key,
                     $this->value,
-                    $this->type->value
+                    PdoType::$values[$this->type->value]
                 );
             }
         }
