@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SqlJoin::class)]
 final class SqlJoinTest extends TestCase
 {
-
     private static Generator $faker;
 
     public static function setUpBeforeClass(): void

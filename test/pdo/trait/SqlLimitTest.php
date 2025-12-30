@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SqlLimit::class)]
 final class SqlLimitTest extends TestCase
 {
-
     private static Generator $faker;
 
     public static function setUpBeforeClass(): void

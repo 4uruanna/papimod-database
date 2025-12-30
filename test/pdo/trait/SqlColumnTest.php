@@ -12,14 +12,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(SqlColumn::class)]
 final class SqlColumnTest extends TestCase
 {
+    use SqlColumn;
+
     private static Generator $faker;
 
     public static function setUpBeforeClass(): void
     {
         self::$faker = Factory::create();
     }
-
-    use SqlColumn;
 
     public function testAdd(): void
     {
