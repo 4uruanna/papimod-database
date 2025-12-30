@@ -5,7 +5,6 @@ namespace Papimod\Database\pdo\trait;
 use Papimod\Database\pdo\model\Parameter;
 use Papimod\Database\pdo\enumerator\Operator;
 use Papimod\Database\pdo\enumerator\Type;
-use PDO;
 use PDOStatement;
 
 trait SqlWhere
@@ -46,7 +45,7 @@ trait SqlWhere
     {
         if (count($this->parameters) === 0) {
             $this->last_parameter_group = [];
-            $this->parameters[] = $this->last_parameter_group;
+            $this->parameters[] = &$this->last_parameter_group;
         }
 
         return $this->and($column);
@@ -61,13 +60,13 @@ trait SqlWhere
     public function or(string $column): self
     {
         $this->last_parameter_group = [];
-        $this->parameters[] = $this->last_parameter_group;
+        $this->parameters[] = &$this->last_parameter_group;
         return $this->and($column);
     }
 
     # Operators
 
-    public function isEqual(mixed $value, Type $type = Type::STRING)
+    public function isEqual(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_EQUAL;
         $this->last_parameter->value = $value;
@@ -76,7 +75,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isNotEqual(mixed $value, Type $type = Type::STRING)
+    public function isNotEqual(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_NOT_EQUAL;
         $this->last_parameter->value = $value;
@@ -85,7 +84,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isGreater(mixed $value, Type $type = Type::STRING)
+    public function isGreater(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_GREATER;
         $this->last_parameter->value = $value;
@@ -94,7 +93,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isLess(mixed $value, Type $type = Type::STRING)
+    public function isLess(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_LESS;
         $this->last_parameter->value = $value;
@@ -103,7 +102,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isGreaterOrEqual(mixed $value, Type $type = Type::STRING)
+    public function isGreaterOrEqual(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_GREATER_OR_EQUAL;
         $this->last_parameter->value = $value;
@@ -112,7 +111,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isLessOrEqual(mixed $value, Type $type = Type::STRING)
+    public function isLessOrEqual(mixed $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_LESS_OR_EQUAL;
         $this->last_parameter->value = $value;
@@ -125,7 +124,7 @@ trait SqlWhere
     {
         $this->last_parameter->operator = Operator::IS_LIKE;
         $this->last_parameter->value = $value;
-        $this->last_parameter->type = Type::STRING;
+        $this->last_parameter->type = Type::TEXT;
         $this->last_parameter_group[] = $this->last_parameter;
         return $this;
     }
@@ -134,12 +133,12 @@ trait SqlWhere
     {
         $this->last_parameter->operator = Operator::IS_NOT_LIKE;
         $this->last_parameter->value = $value;
-        $this->last_parameter->type = Type::STRING;
+        $this->last_parameter->type = Type::TEXT;
         $this->last_parameter_group[] = $this->last_parameter;
         return $this;
     }
 
-    public function isIn(array $value, Type $type = Type::STRING)
+    public function isIn(array $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_IN;
         $this->last_parameter->value = $value;
@@ -148,7 +147,7 @@ trait SqlWhere
         return $this;
     }
 
-    public function isNotIn(array $value, Type $type = Type::STRING)
+    public function isNotIn(array $value, Type $type = Type::TEXT)
     {
         $this->last_parameter->operator = Operator::IS_NOT_IN;
         $this->last_parameter->value = $value;
